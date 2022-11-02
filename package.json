@@ -1,6 +1,6 @@
 {
   "name": "chatme-widgets",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "./src/index.js",
   "description": "Chats & Messages service for NEAR Blockchain - React widgets",
   "homepage": "https://chatme.page/",
@@ -20,7 +20,7 @@
     "react-textarea-autosize": "^8.3.4"
   },
   "peerDependencies": {
-    "react": "*"
+    "react": "^16.8.0 || ^17 || ^18"
   },
   "keywords": [
     "NEAR",
