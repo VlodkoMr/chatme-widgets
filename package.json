@@ -1,6 +1,7 @@
 {
   "name": "chatme-widgets",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "main": "./src/index.js",
   "description": "Chats & Messages service for NEAR Blockchain - React widgets",
   "homepage": "https://chatme.page/",
   "browserify": {
@@ -23,12 +24,15 @@
     "near-api-js": "~0.44.2",
     "react-textarea-autosize": "^8.3.4"
   },
+  "peerDependencies": {
+    "react": "*"
+  },
   "keywords": [
     "NEAR",
-    "chat",
-    "message",
-    "react",
-    "widgets",
+    "Chat",
+    "Message",
+    "React",
+    "Widgets",
     "react-component"
   ],
   "author": "Vlodkow",

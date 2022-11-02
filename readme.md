@@ -5,13 +5,13 @@ Chats & Messages service for NEAR Blockchain
 ## Install
 
 ```bash
-npm install --save @vlodkow/chatme-widgets
+npm install --save chatme-widgets
 ```
 
 ## Usage
 
 ```tsx
-import {ChatmeChat} from '@vlodkow/chatme-widgets'
+import { ChatmeChat } from 'chatme-widgets'
 ```
 
 ```html
