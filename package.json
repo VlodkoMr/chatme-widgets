@@ -1,7 +1,9 @@
 {
   "name": "chatme-widgets",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "./src/index.js",
+  "author": "Vlodkow",
+  "license": "MIT",
   "description": "Chats & Messages service for NEAR Blockchain - React widgets",
   "homepage": "https://chatme.page/",
   "repository": {
@@ -14,10 +16,10 @@
     "@near-wallet-selector/modal-ui": "^7.1.0",
     "@near-wallet-selector/near-wallet": "^7.1.0",
     "@near-wallet-selector/sender": "^7.1.0",
-    "urql": "^3.0.3",
     "graphql": "^16.6.0",
     "near-api-js": "~0.44.2",
-    "react-textarea-autosize": "^8.3.4"
+    "react-textarea-autosize": "^8.3.4",
+    "urql": "^3.0.3"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17 || ^18"
@@ -30,14 +32,22 @@
     "Widgets",
     "react-component"
   ],
-  "author": "Vlodkow",
-  "license": "MIT",
   "eslintConfig": {
     "extends": [
       "react-app"
     ]
   },
-  "browserslist": [
-    "defaults"
-  ]
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all",
+      "not ios_saf < 13"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }
