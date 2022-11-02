@@ -1,6 +1,6 @@
 {
   "name": "chatme-widgets",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "./src/index.js",
   "description": "Chats & Messages service for NEAR Blockchain - React widgets",
   "homepage": "https://chatme.page/",
