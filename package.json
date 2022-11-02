@@ -4,11 +4,6 @@
   "main": "./src/index.js",
   "description": "Chats & Messages service for NEAR Blockchain - React widgets",
   "homepage": "https://chatme.page/",
-  "browserify": {
-    "transform": [
-      "reactify"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "git@github.com:VlodkoMr/chatme-widgets.git"
@@ -36,5 +31,13 @@
     "react-component"
   ],
   "author": "Vlodkow",
-  "license": "MIT"
+  "license": "MIT",
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": [
+    "defaults"
+  ]
 }
