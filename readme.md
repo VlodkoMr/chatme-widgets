@@ -4,24 +4,31 @@ Chats & Messages service for NEAR Blockchain
 
 ## Install
 
+1. Setup required packages:
+
 ```bash
-npm install --save chatme-widgets
+npm install --save urql@3 graphql@16 react-textarea-autosize@8 @near-wallet-selector/core @near-wallet-selector/ledger @near-wallet-selector/modal-ui @near-wallet-selector/near-wallet @near-wallet-selector/sender
 ```
 
-## Usage
+2. Copy all files from src directory into your project.
+
+3. Import ChatMe component and add to template:
 
 ```tsx
-import { ChatmeChat } from 'chatme-widgets'
+import {ChatmeChat} from "./__DIR__/ChatmeChat";
 ```
 
 ```html
-<ChatmeChat chatId="{}"
+
+<ChatmeChat chatId="{__CHAT_ID__}"
             network="testnet"
-            chatBodyClass="" 
+            chatBodyClass=""
             connectButtonClass=""
-            bottomBlockClass="" 
+            bottomBlockClass=""
 />
 ```
+
+NOTE: Replace __DIR__ to you directory destination and __CHAT_ID__ to specific chat id that you receive when create new chat.
 
 ## Links
 

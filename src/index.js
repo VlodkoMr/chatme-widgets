@@ -1,1 +1,3 @@
-export { ChatmeChat } from './ChatmeChat';
+import ChatmeChat from "./ChatmeChat";
+
+export default ChatmeChat;

@@ -13,7 +13,7 @@ import { Loader } from "./components/Loader";
 const fetchSecondsInterval = 5;
 const messagesPerPage = 100;
 
-export const ChatmeChat = ({ chatId, network, chatBodyClass, connectButtonClass, bottomBlockClass }) => {
+const ChatmeChat = ({ chatId, network, chatBodyClass, connectButtonClass, bottomBlockClass }) => {
   const bottomRef = useRef(null);
   const walletInterface = new Wallet({ createAccessKeyFor: chatmeContractAddress(network) });
   const [wallet, setWallet] = useState({
@@ -191,3 +191,5 @@ export const ChatmeChat = ({ chatId, network, chatBodyClass, connectButtonClass,
     </>
   );
 };
+
+export default ChatmeChat;
