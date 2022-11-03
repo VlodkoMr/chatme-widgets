@@ -1,6 +1,6 @@
 {
   "name": "chatme-widgets",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "./dist/index.js",
   "author": "Vlodkow",
   "license": "MIT",
@@ -11,7 +11,7 @@
     "url": "git@github.com:VlodkoMr/chatme-widgets.git"
   },
   "scripts": {
-    "build": "./node_modules/.bin/babel src --out-dir dist"
+    "build": "./node_modules/.bin/babel src --out-dir dist --copy-files"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",
@@ -29,7 +29,8 @@
     "urql": "^3.0.3"
   },
   "peerDependencies": {
-    "react": "^16.8.0 || ^17 || ^18"
+    "react": "^16.8.0 || ^17 || ^18",
+    "react-dom": "^16.8.0 || ^17 || ^18"
   },
   "keywords": [
     "NEAR",
