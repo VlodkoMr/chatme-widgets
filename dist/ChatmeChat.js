@@ -17,6 +17,10 @@ require("./assets/css/styles.css");
 var _Loader = require("./components/Loader");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -67,22 +71,30 @@ var ChatmeChat = function ChatmeChat(_ref) {
     _useState10 = _slicedToArray(_useState9, 2),
     historyMessages = _useState10[0],
     setHistoryMessages = _useState10[1];
-  var _useState11 = (0, _react.useState)([]),
+  var _useState11 = (0, _react.useState)(0),
     _useState12 = _slicedToArray(_useState11, 2),
-    tmpMessages = _useState12[0],
-    setTmpMessages = _useState12[1];
-  var _useState13 = (0, _react.useState)(null),
+    historyPage = _useState12[0],
+    setHistoryPage = _useState12[1];
+  var _useState13 = (0, _react.useState)(false),
     _useState14 = _slicedToArray(_useState13, 2),
-    replyToMessage = _useState14[0],
-    setReplyToMessage = _useState14[1];
-  var _useState15 = (0, _react.useState)({}),
+    hideHistoryButton = _useState14[0],
+    setHideHistoryButton = _useState14[1];
+  var _useState15 = (0, _react.useState)([]),
     _useState16 = _slicedToArray(_useState15, 2),
-    userProfiles = _useState16[0],
-    setUserProfiles = _useState16[1];
-  var _useState17 = (0, _react.useState)(0),
+    tmpMessages = _useState16[0],
+    setTmpMessages = _useState16[1];
+  var _useState17 = (0, _react.useState)(null),
     _useState18 = _slicedToArray(_useState17, 2),
-    reloadCounter = _useState18[0],
-    setReloadCounter = _useState18[1];
+    replyToMessage = _useState18[0],
+    setReplyToMessage = _useState18[1];
+  var _useState19 = (0, _react.useState)({}),
+    _useState20 = _slicedToArray(_useState19, 2),
+    userProfiles = _useState20[0],
+    setUserProfiles = _useState20[1];
+  var _useState21 = (0, _react.useState)(0),
+    _useState22 = _slicedToArray(_useState21, 2),
+    reloadCounter = _useState22[0],
+    setReloadCounter = _useState22[1];
   var initWallet = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var chatmeInterface, socialInterface, walletConnect;
@@ -220,6 +232,25 @@ var ChatmeChat = function ChatmeChat(_ref) {
       return prev.concat(tmpMessage);
     });
   };
+
+  // load previous messages
+  var loadHistoryMessages = function loadHistoryMessages() {
+    setHideHistoryButton(true);
+    setHistoryPage(function (prev) {
+      return prev + 1;
+    });
+    var skipMessages = messagesPerPage * (historyPage + 1);
+    (0, _requests.loadGroupMessages)(id, messagesPerPage, skipMessages).then(function (messages) {
+      var newMessages = (0, _transform.transformMessages)(messages, wallet.accountId);
+      if (newMessages.length === messagesPerPage) {
+        setHideHistoryButton(false);
+      }
+      setHistoryMessages(function (prev) {
+        prev.unshift.apply(prev, _toConsumableArray(newMessages));
+        return prev;
+      });
+    });
+  };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
     className: "flex-1 flex flex-col overflow-y-scroll ".concat(chatBodyClass ? chatBodyClass : "chat-body p-4")
   }, isReady ? /*#__PURE__*/_react.default.createElement("div", {
@@ -232,7 +263,9 @@ var ChatmeChat = function ChatmeChat(_ref) {
     messagesPerPage: messagesPerPage,
     setReplyToMessage: setReplyToMessage,
     userProfiles: userProfiles,
-    opponentAddress: chatId
+    opponentAddress: chatId,
+    loadHistoryMessages: loadHistoryMessages,
+    hideHistoryButton: hideHistoryButton
   }) : /*#__PURE__*/_react.default.createElement("div", {
     className: "text-center text-sm opacity-60 pt-2"
   }, "*No Messages")) : /*#__PURE__*/_react.default.createElement("div", {

@@ -28,6 +28,8 @@ const ChatmeChat = ({ chatId, network, chatBodyClass, connectButtonClass, bottom
   const [group, setGroup] = useState();
   const [messages, setMessages] = useState([]);
   const [historyMessages, setHistoryMessages] = useState([]);
+  const [historyPage, setHistoryPage] = useState(0);
+  const [hideHistoryButton, setHideHistoryButton] = useState(false);
   const [tmpMessages, setTmpMessages] = useState([]);
   const [replyToMessage, setReplyToMessage] = useState(null);
   const [userProfiles, setUserProfiles] = useState({});
@@ -148,6 +150,25 @@ const ChatmeChat = ({ chatId, network, chatBodyClass, connectButtonClass, bottom
     setTmpMessages(prev => prev.concat(tmpMessage));
   }
 
+  // load previous messages
+  const loadHistoryMessages = () => {
+    setHideHistoryButton(true);
+    setHistoryPage(prev => prev + 1);
+
+    const skipMessages = messagesPerPage * (historyPage + 1);
+    loadGroupMessages(id, messagesPerPage, skipMessages).then(messages => {
+      const newMessages = transformMessages(messages, wallet.accountId);
+      if (newMessages.length === messagesPerPage) {
+        setHideHistoryButton(false);
+      }
+
+      setHistoryMessages(prev => {
+        prev.unshift(...newMessages);
+        return prev;
+      });
+    });
+  }
+
   return (
     <>
       <div className={`flex-1 flex flex-col overflow-y-scroll ${chatBodyClass ? chatBodyClass : "chat-body p-4"}`}>
@@ -162,6 +183,8 @@ const ChatmeChat = ({ chatId, network, chatBodyClass, connectButtonClass, bottom
                             setReplyToMessage={setReplyToMessage}
                             userProfiles={userProfiles}
                             opponentAddress={chatId}
+                            loadHistoryMessages={loadHistoryMessages}
+                            hideHistoryButton={hideHistoryButton}
               />
             ) : (
               <div className={"text-center text-sm opacity-60 pt-2"}>

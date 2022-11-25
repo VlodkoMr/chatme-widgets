@@ -14,15 +14,20 @@ var MessagesList = function MessagesList(_ref) {
     opponent = _ref.opponent,
     opponentAddress = _ref.opponentAddress,
     userProfiles = _ref.userProfiles,
-    wallet = _ref.wallet;
+    wallet = _ref.wallet,
+    loadHistoryMessages = _ref.loadHistoryMessages,
+    hideHistoryButton = _ref.hideHistoryButton;
   var isLastMessage = function isLastMessage(message, index) {
     return !messages[index + 1] || messages[index + 1].from_address !== message.from_address;
   };
-  return /*#__PURE__*/React.createElement(React.Fragment, null, messages.length >= messagesPerPage && /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, messages.length >= messagesPerPage && !hideHistoryButton && /*#__PURE__*/React.createElement("div", {
     className: "w-40 mx-auto text-center"
   }, /*#__PURE__*/React.createElement("button", {
     type: "button",
-    className: "w-full"
+    className: "w-full",
+    onClick: function onClick() {
+      return loadHistoryMessages();
+    }
   }, "load previous")), historyMessages.map(function (message) {
     return /*#__PURE__*/React.createElement(_OneMessage.OneMessage, {
       message: message,

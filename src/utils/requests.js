@@ -33,14 +33,16 @@ const getTheGraphApiUrl = (network) => {
   return `https://api.thegraph.com/subgraphs/name/vlodkomr/${contract}`;
 }
 
-export const loadGroupMessages = (network, groupId, messagesCount) => {
+export const loadGroupMessages = (network, groupId, messagesCount, skip = 0) => {
   return new Promise(async (resolve) => {
 
     const client = new createClient({ url: getTheGraphApiUrl(network) });
     const messagesQuery = `{
         groupMessages(
-          last: ${messagesCount}, 
-          orderBy: created_at, 
+          last: ${messagesCount},
+          skip: ${skip},
+          orderBy: created_at,
+          orderDirection: desc,
           where: {
             group_id: "${groupId}",
           }) {
@@ -54,7 +56,11 @@ export const loadGroupMessages = (network, groupId, messagesCount) => {
           }
         }`;
     const result = await client.query(messagesQuery).toPromise();
-    resolve(result.data?.groupMessages);
+    if (result.data) {
+      resolve(result.data?.groupMessages.reverse());
+    } else {
+      resolve([]);
+    }
   });
 }
 
@@ -64,7 +70,8 @@ export const loadNewGroupMessages = (network, groupId, lastMessageId) => {
     const client = new createClient({ url: getTheGraphApiUrl(network) });
     const messagesQuery = `{
         groupMessages(
-          orderBy: created_at, 
+          orderBy: created_at,
+          orderDirection: desc,
           where: {
             group_id: "${groupId}",
             id_num_gt: ${lastMessageId}
@@ -79,7 +86,11 @@ export const loadNewGroupMessages = (network, groupId, lastMessageId) => {
           }
         }`;
     const result = await client.query(messagesQuery).toPromise();
-    resolve(result.data?.groupMessages);
+    if (result.data) {
+      resolve(result.data?.groupMessages.reverse());
+    } else {
+      resolve([]);
+    }
   });
 }
 

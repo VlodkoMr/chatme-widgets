@@ -87,10 +87,10 @@ var getTheGraphApiUrl = function getTheGraphApiUrl(network) {
   return "https://api.thegraph.com/subgraphs/name/vlodkomr/".concat(contract);
 };
 var loadGroupMessages = function loadGroupMessages(network, groupId, messagesCount) {
+  var skip = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
   return new Promise( /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(resolve) {
-      var _result$data;
-      var client, messagesQuery, result;
+      var client, messagesQuery, result, _result$data;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
@@ -98,12 +98,16 @@ var loadGroupMessages = function loadGroupMessages(network, groupId, messagesCou
               client = new _urql.createClient({
                 url: getTheGraphApiUrl(network)
               });
-              messagesQuery = "{\n        groupMessages(\n          last: ".concat(messagesCount, ", \n          orderBy: created_at, \n          where: {\n            group_id: \"").concat(groupId, "\",\n          }) {\n            id\n            inner_id\n            text\n            image\n            from_address\n            created_at\n            reply_message {id, from_address, text, image}\n          }\n        }");
+              messagesQuery = "{\n        groupMessages(\n          last: ".concat(messagesCount, ",\n          skip: ").concat(skip, ",\n          orderBy: created_at,\n          orderDirection: desc,\n          where: {\n            group_id: \"").concat(groupId, "\",\n          }) {\n            id\n            inner_id\n            text\n            image\n            from_address\n            created_at\n            reply_message {id, from_address, text, image}\n          }\n        }");
               _context3.next = 4;
               return client.query(messagesQuery).toPromise();
             case 4:
               result = _context3.sent;
-              resolve((_result$data = result.data) === null || _result$data === void 0 ? void 0 : _result$data.groupMessages);
+              if (result.data) {
+                resolve((_result$data = result.data) === null || _result$data === void 0 ? void 0 : _result$data.groupMessages.reverse());
+              } else {
+                resolve([]);
+              }
             case 6:
             case "end":
               return _context3.stop();
@@ -120,8 +124,7 @@ exports.loadGroupMessages = loadGroupMessages;
 var loadNewGroupMessages = function loadNewGroupMessages(network, groupId, lastMessageId) {
   return new Promise( /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(resolve) {
-      var _result$data2;
-      var client, messagesQuery, result;
+      var client, messagesQuery, result, _result$data2;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
@@ -129,12 +132,16 @@ var loadNewGroupMessages = function loadNewGroupMessages(network, groupId, lastM
               client = new _urql.createClient({
                 url: getTheGraphApiUrl(network)
               });
-              messagesQuery = "{\n        groupMessages(\n          orderBy: created_at, \n          where: {\n            group_id: \"".concat(groupId, "\",\n            id_num_gt: ").concat(lastMessageId, "\n          }) {\n            id\n            inner_id\n            text\n            image\n            from_address\n            created_at\n            reply_message {id, from_address, text, image}\n          }\n        }");
+              messagesQuery = "{\n        groupMessages(\n          orderBy: created_at,\n          orderDirection: desc,\n          where: {\n            group_id: \"".concat(groupId, "\",\n            id_num_gt: ").concat(lastMessageId, "\n          }) {\n            id\n            inner_id\n            text\n            image\n            from_address\n            created_at\n            reply_message {id, from_address, text, image}\n          }\n        }");
               _context4.next = 4;
               return client.query(messagesQuery).toPromise();
             case 4:
               result = _context4.sent;
-              resolve((_result$data2 = result.data) === null || _result$data2 === void 0 ? void 0 : _result$data2.groupMessages);
+              if (result.data) {
+                resolve((_result$data2 = result.data) === null || _result$data2 === void 0 ? void 0 : _result$data2.groupMessages.reverse());
+              } else {
+                resolve([]);
+              }
             case 6:
             case "end":
               return _context4.stop();

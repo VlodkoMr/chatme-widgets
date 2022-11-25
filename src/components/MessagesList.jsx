@@ -9,7 +9,9 @@ export const MessagesList = ({
   opponent,
   opponentAddress,
   userProfiles,
-  wallet
+  wallet,
+  loadHistoryMessages,
+  hideHistoryButton
 }) => {
 
   const isLastMessage = (message, index) => {
@@ -18,9 +20,9 @@ export const MessagesList = ({
 
   return (
     <>
-      {messages.length >= messagesPerPage && (
+      {(messages.length >= messagesPerPage && !hideHistoryButton) && (
         <div className={"w-40 mx-auto text-center"}>
-          <button type="button" className={"w-full"}>
+          <button type="button" className={"w-full"} onClick={() => loadHistoryMessages()}>
             load previous
           </button>
         </div>
