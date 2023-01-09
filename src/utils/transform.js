@@ -9,18 +9,19 @@ export const convertToTera = (amount) => {
   return `${amount}000000000000`;
 };
 
-export const transformOneMessage = (message, accountId, isFirst, isLast, isTemporary) => {
+export const transformOneMessage = (message, accountId, isUserFirst, isDateFirst, isLast, isTemporary) => {
   message.isEncryptStart = message.text.indexOf("(secret-start:") !== -1;
   message.isEncryptAccept = message.text.indexOf("(secret-accept:") !== -1;
   message.isEncryptEnd = message.text.indexOf("(secret-end)") !== -1;
   message.isMy = message.from_address === accountId;
   message.isTemporary = isTemporary;
-  message.isFirst = isFirst;
+  message.isUserFirst = isUserFirst;
+  message.isDateFirst = isDateFirst;
   message.isLast = isLast;
   message.opponentAddress = message.isMy ? message.to_address : message.from_address;
 
   if (message.reply_message) {
-    message.reply_message = transformOneMessage(message.reply_message, accountId, false, false, false)
+    message.reply_message = transformOneMessage(message.reply_message, accountId, false, false, false, false)
   }
 
   return message;
@@ -40,14 +41,16 @@ export const transformProfile = (address, socialProfile) => {
   return resultProfile;
 }
 
-export const transformMessages = (messages, accountId, lastMessageDate) => {
+export const transformMessages = (messages, accountId, lastMessageDate, lastMessageUser) => {
   return messages.map((message, index) => {
     const date = timestampToDate(message.created_at);
     const isLast = !messages[index + 1] || messages[index + 1].from_address !== message.from_address;
-    const isFirst = date !== lastMessageDate;
-    const result = transformOneMessage(message, accountId, isFirst, isLast, false);
+    const isDateFirst = date !== lastMessageDate;
+    const isUserFirst = message.from_address !== lastMessageUser;
+    const result = transformOneMessage(message, accountId, isUserFirst, isDateFirst, isLast, false);
 
     lastMessageDate = date;
+    lastMessageUser = message.from_address;
     return result;
   });
 }
@@ -90,5 +93,5 @@ export const generateTemporaryMessage = (text, image, accountId, opponentAddress
     image,
     encrypt_key: encryptKey || ""
   }
-  return transformOneMessage(message, accountId, true, true, true);
+  return transformOneMessage(message, accountId, true, true, true, true);
 }

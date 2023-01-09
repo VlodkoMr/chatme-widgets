@@ -72,7 +72,7 @@ export const GroupChatBottom = ({
             <div className={"text-sm w-32 overflow-hidden leading-4 pt-1"}>
               <a href={chatmeURL}
                  className={"block font-semibold w-32 mb-0.5 overflow-hidden overflow-ellipsis whitespace-nowrap hover:opacity-90 transition"}>
-                {wallet.accountId}{wallet.accountId}
+                {wallet.accountId}
               </a>
               <small onClick={() => wallet.interface.signOut()}
                      className={"cursor-pointer text-red-400 hover:text-red-300 transition"}>
