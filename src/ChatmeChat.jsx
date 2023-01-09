@@ -54,6 +54,23 @@ const ChatmeChat = ({ chatId, network, chatBodyClass, connectButtonClass, bottom
       chatmeContract: chatmeInterface,
       socialContract: socialInterface,
     });
+
+    // async wallets support - meteor, sender, here-wallet
+    walletInterface.walletSelector.store.observable.subscribe(async (nextAccounts) => {
+      if (nextAccounts.accounts.length) {
+        setWallet(prev => {
+          prev.isSigned = true;
+          prev.accountId = nextAccounts.accounts[0].accountId;
+          return prev;
+        });
+      } else {
+        setWallet(prev => {
+          prev.isSigned = false;
+          prev.accountId = "";
+          return prev;
+        });
+      }
+    });
   }
 
   useEffect(() => {
@@ -62,24 +79,6 @@ const ChatmeChat = ({ chatId, network, chatBodyClass, connectButtonClass, bottom
       setTmpMessages([]);
     });
   }, [chatId]);
-
-  // useEffect(() => {
-  //   const subscription = wallet.walletSelector.store.observable.subscribe(async (nextAccounts) => {
-  //     if (nextAccounts.accounts.length) {
-  //       await wallet.onAccountChange(nextAccounts.accounts[0].accountId);
-  //       setIsSigned(true);
-  //
-  //       loadAccount().then(account => {
-  //         setAccount(account);
-  //       });
-  //     } else {
-  //       setIsSigned(false);
-  //       setAccount(null);
-  //     }
-  //   });
-  //
-  //   return () => subscription.unsubscribe();
-  // }, []);
 
   useEffect(() => {
     if (wallet.interface) {
@@ -112,7 +111,7 @@ const ChatmeChat = ({ chatId, network, chatBodyClass, connectButtonClass, bottom
         clearInterval(updateInterval);
       }
     }
-  }, [wallet.interface]);
+  }, [wallet.interface, wallet.isSigned]);
 
   useEffect(() => {
     if (reloadCounter) {
