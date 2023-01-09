@@ -1,4 +1,5 @@
 import { base_encode } from "near-api-js/lib/utils/serialize";
+import { timestampToDate } from "./datetime";
 
 export const mediaURL = (ipfsHash) => {
   return `https://ipfs.io/ipfs/${ipfsHash}`;
@@ -39,13 +40,14 @@ export const transformProfile = (address, socialProfile) => {
   return resultProfile;
 }
 
-export const transformMessages = (messages, accountId, lastMessageUser) => {
+export const transformMessages = (messages, accountId, lastMessageDate) => {
   return messages.map((message, index) => {
+    const date = timestampToDate(message.created_at);
     const isLast = !messages[index + 1] || messages[index + 1].from_address !== message.from_address;
-    const isFirst = lastMessageUser !== message.from_address;
+    const isFirst = date !== lastMessageDate;
     const result = transformOneMessage(message, accountId, isFirst, isLast, false);
 
-    lastMessageUser = message.from_address;
+    lastMessageDate = date;
     return result;
   });
 }

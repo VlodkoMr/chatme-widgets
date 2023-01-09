@@ -7,6 +7,7 @@ exports.OneMessage = void 0;
 var _datetime = require("../utils/datetime");
 var _Avatar = require("./Avatar");
 var _transform = require("../utils/transform");
+var _reactLinkifyIt = require("react-linkify-it");
 var OneMessage = function OneMessage(_ref) {
   var message = _ref.message,
     opponent = _ref.opponent,
@@ -29,7 +30,7 @@ var OneMessage = function OneMessage(_ref) {
   };
   return /*#__PURE__*/React.createElement(React.Fragment, null, message.isFirst && !message.isTemporary && /*#__PURE__*/React.createElement("p", {
     className: "p-4 text-center text-sm font-medium text-gray-500"
-  }, (0, _datetime.timestampToDate)(message.created_at), ", ", (0, _datetime.timestampToTime)(message.created_at)), /*#__PURE__*/React.createElement("div", {
+  }, (0, _datetime.timestampToDate)(message.created_at, 'long')), /*#__PURE__*/React.createElement("div", {
     className: "flex flex-row mb-2 justify-start ".concat(message.isMy ? "justify-end" : "justify-start")
   }, /*#__PURE__*/React.createElement("div", {
     className: "hidden md:block md:w-10 md:h-10 relative flex flex-shrink-0 mr-4"
@@ -86,17 +87,23 @@ var OneMessage = function OneMessage(_ref) {
     className: "mr-2"
   }, message.reply_message.from_address), /*#__PURE__*/React.createElement("span", {
     className: "whitespace-nowrap overflow-hidden max-w-[260px] overflow-ellipsis inline-block align-bottom"
-  }, (0, _transform.decodeMessageText)(message.reply_message, accountId))), message.image && /*#__PURE__*/React.createElement("img", {
-    alt: "",
-    src: (0, _transform.mediaURL)(message.image),
-    className: "h-[220px] min-w-[100px] rounded-lg mt-2 mb-3 object-contain"
-  }), (0, _transform.decodeMessageText)(message, accountId) === '(like)' ? /*#__PURE__*/React.createElement("svg", {
+  }, (0, _transform.decodeMessageText)(message.reply_message, accountId))), /*#__PURE__*/React.createElement("div", {
+    className: "flex justify-between"
+  }, /*#__PURE__*/React.createElement("p", null, (0, _transform.decodeMessageText)(message, accountId) === '(like)' ? /*#__PURE__*/React.createElement("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     viewBox: "0 0 24 24",
     className: "w-6 h-6 fill-current inline"
   }, /*#__PURE__*/React.createElement("path", {
     d: "M2 10h3v10H2zm17-1h-5V4a1 1 0 0 0-1-1h-1L7.66473 8.37579A3.00021 3.00021 0 0 0 7 10.259V18a2 2 0 0 0 2 2h6.43481a2.99991 2.99991 0 0 0 2.69037-1.67273L21 12.5V11a2 2 0 0 0-2-2Z"
-  })) : /*#__PURE__*/React.createElement(React.Fragment, null, (0, _transform.decodeMessageText)(message, accountId)), message.encrypt_key && /*#__PURE__*/React.createElement("img", {
+  })) : /*#__PURE__*/React.createElement(_reactLinkifyIt.LinkItUrl, {
+    className: "text-blue-300 hover:underline"
+  }, (0, _transform.decodeMessageText)(message, accountId))), /*#__PURE__*/React.createElement("span", {
+    className: "ml-2.5 leading-6 text-xs opacity-40"
+  }, (0, _datetime.timestampToTime)(message === null || message === void 0 ? void 0 : message.created_at))), message.image && /*#__PURE__*/React.createElement("img", {
+    alt: "",
+    src: (0, _transform.mediaURL)(message.image),
+    className: "h-[220px] min-w-[100px] rounded-lg mt-2 mb-3 object-contain"
+  }), message.encrypt_key && /*#__PURE__*/React.createElement("img", {
     src: require("../assets/images/lock.svg"),
     alt: "",
     className: "absolute fill-current w-4 h-4 top-0 ".concat(message.isMy ? "-left-1" : "-right-1")

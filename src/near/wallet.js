@@ -6,12 +6,18 @@ import { setupModal } from '@near-wallet-selector/modal-ui';
 import LedgerIconUrl from '@near-wallet-selector/ledger/assets/ledger-icon.png';
 import NearIconUrl from '@near-wallet-selector/near-wallet/assets/near-wallet-icon.png';
 import SenderIconUrl from '@near-wallet-selector/sender/assets/sender-icon.png';
+import MyNearIconUrl from '@near-wallet-selector/my-near-wallet/assets/my-near-wallet-icon.png';
+// import HereWalletIconUrl from '@near-wallet-selector/here-wallet/assets/here-wallet-icon.png';
+import MeteorWalletIconUrl from '@near-wallet-selector/meteor-wallet/assets/meteor-icon.png';
 
 // wallet selector options
 import { setupWalletSelector } from '@near-wallet-selector/core';
 import { setupLedger } from '@near-wallet-selector/ledger';
 import { setupNearWallet } from '@near-wallet-selector/near-wallet';
 import { setupSender } from '@near-wallet-selector/sender';
+import { setupMeteorWallet } from '@near-wallet-selector/meteor-wallet';
+// import { setupHereWallet } from '@near-wallet-selector/here-wallet';
+import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
 
 const THIRTY_TGAS = '30000000000000';
 const NO_DEPOSIT = '0';
@@ -38,8 +44,11 @@ export class Wallet {
       network: this.network,
       modules: [
         setupNearWallet({ iconUrl: NearIconUrl }),
+        setupMyNearWallet({ iconUrl: MyNearIconUrl }),
         setupSender({ iconUrl: SenderIconUrl }),
         setupLedger({ iconUrl: LedgerIconUrl }),
+        setupMeteorWallet({ iconUrl: MeteorWalletIconUrl }),
+        // setupHereWallet({ iconUrl: HereWalletIconUrl }),
       ],
     });
 
@@ -53,6 +62,11 @@ export class Wallet {
     return isSignedIn;
   }
 
+  async onAccountChange(accountId) {
+    this.wallet = await this.walletSelector.wallet();
+    this.accountId = accountId;
+  }
+
   // Sign-in method
   signIn() {
     const description = 'Please select a wallet to sign in.';
@@ -63,8 +77,11 @@ export class Wallet {
   // Sign-out method
   signOut() {
     this.wallet.signOut();
-    this.wallet = this.accountId = this.createAccessKeyFor = null;
-    window.location.replace(window.location.origin + window.location.pathname);
+
+    if (this.wallet.id === "near-wallet" || this.wallet.id === "my-near-wallet") {
+      this.wallet = this.accountId = this.createAccessKeyFor = null;
+      window.location.replace(window.location.origin + window.location.pathname);
+    }
   }
 
   // Make a read-only call to retrieve information from the network

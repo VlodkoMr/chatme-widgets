@@ -1,6 +1,7 @@
 import { timestampToDate, timestampToTime } from "../utils/datetime";
 import { Avatar } from "./Avatar";
 import { decodeMessageText, mediaURL } from "../utils/transform";
+import { LinkItUrl } from "react-linkify-it";
 
 export const OneMessage = ({ message, opponent, isLast, setReplyToMessage, wallet }) => {
 
@@ -21,7 +22,7 @@ export const OneMessage = ({ message, opponent, isLast, setReplyToMessage, walle
     <>
       {message.isFirst && !message.isTemporary && (
         <p className="p-4 text-center text-sm font-medium text-gray-500">
-          {timestampToDate(message.created_at)}, {timestampToTime(message.created_at)}
+          {timestampToDate(message.created_at, 'long')}
         </p>
       )}
 
@@ -91,20 +92,30 @@ export const OneMessage = ({ message, opponent, isLast, setReplyToMessage, walle
                 </p>
               )}
 
+              <div className={"flex justify-between"}>
+                <p>
+                  {decodeMessageText(message, accountId) === '(like)' ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 h-6 fill-current inline">
+                      <path
+                        d="M2 10h3v10H2zm17-1h-5V4a1 1 0 0 0-1-1h-1L7.66473 8.37579A3.00021 3.00021 0 0 0 7 10.259V18a2 2 0 0 0 2 2h6.43481a2.99991 2.99991 0 0 0 2.69037-1.67273L21 12.5V11a2 2 0 0 0-2-2Z"/>
+                    </svg>
+                  ) : (
+                    <LinkItUrl className={`text-blue-300 hover:underline`}>
+                      {decodeMessageText(message, accountId)}
+                    </LinkItUrl>
+                  )}
+                </p>
+
+                <span className={"ml-2.5 leading-6 text-xs opacity-40"}>
+                  {timestampToTime(message?.created_at)}
+                </span>
+              </div>
+
               {message.image && (
                 <img alt=""
                      src={mediaURL(message.image)}
                      className={"h-[220px] min-w-[100px] rounded-lg mt-2 mb-3 object-contain"}
                 />
-              )}
-
-              {decodeMessageText(message, accountId) === '(like)' ? (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-6 h-6 fill-current inline">
-                  <path
-                    d="M2 10h3v10H2zm17-1h-5V4a1 1 0 0 0-1-1h-1L7.66473 8.37579A3.00021 3.00021 0 0 0 7 10.259V18a2 2 0 0 0 2 2h6.43481a2.99991 2.99991 0 0 0 2.69037-1.67273L21 12.5V11a2 2 0 0 0-2-2Z"/>
-                </svg>
-              ) : (
-                <>{decodeMessageText(message, accountId)}</>
               )}
 
               {message.encrypt_key && (

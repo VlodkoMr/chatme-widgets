@@ -9,6 +9,7 @@ import { GroupChatBottom } from "./components/GroupChatBottom";
 
 import "./assets/css/styles.css";
 import { Loader } from "./components/Loader";
+import { timestampToDate } from "./utils/datetime";
 
 const fetchSecondsInterval = 5;
 const messagesPerPage = 100;
@@ -61,6 +62,24 @@ const ChatmeChat = ({ chatId, network, chatBodyClass, connectButtonClass, bottom
       setTmpMessages([]);
     });
   }, [chatId]);
+
+  // useEffect(() => {
+  //   const subscription = wallet.walletSelector.store.observable.subscribe(async (nextAccounts) => {
+  //     if (nextAccounts.accounts.length) {
+  //       await wallet.onAccountChange(nextAccounts.accounts[0].accountId);
+  //       setIsSigned(true);
+  //
+  //       loadAccount().then(account => {
+  //         setAccount(account);
+  //       });
+  //     } else {
+  //       setIsSigned(false);
+  //       setAccount(null);
+  //     }
+  //   });
+  //
+  //   return () => subscription.unsubscribe();
+  // }, []);
 
   useEffect(() => {
     if (wallet.interface) {
@@ -138,7 +157,7 @@ const ChatmeChat = ({ chatId, network, chatBodyClass, connectButtonClass, bottom
         }));
 
         // append new messages
-        const newMessages = transformMessages(messages, wallet.accountId, lastMessage?.from_address);
+        const newMessages = transformMessages(messages, wallet.accountId, timestampToDate(lastMessage?.created_at));
         setMessages(prev => prev.concat(newMessages));
       }
     });

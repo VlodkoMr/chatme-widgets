@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.transformProfile = exports.transformOneMessage = exports.transformMessages = exports.onlyUnique = exports.mediaURL = exports.getInnerId = exports.generateTemporaryMessage = exports.decodeMessageText = exports.convertToTera = void 0;
 var _serialize = require("near-api-js/lib/utils/serialize");
+var _datetime = require("./datetime");
 var mediaURL = function mediaURL(ipfsHash) {
   return "https://ipfs.io/ipfs/".concat(ipfsHash);
 };
@@ -44,12 +45,13 @@ var transformProfile = function transformProfile(address, socialProfile) {
   return resultProfile;
 };
 exports.transformProfile = transformProfile;
-var transformMessages = function transformMessages(messages, accountId, lastMessageUser) {
+var transformMessages = function transformMessages(messages, accountId, lastMessageDate) {
   return messages.map(function (message, index) {
+    var date = (0, _datetime.timestampToDate)(message.created_at);
     var isLast = !messages[index + 1] || messages[index + 1].from_address !== message.from_address;
-    var isFirst = lastMessageUser !== message.from_address;
+    var isFirst = date !== lastMessageDate;
     var result = transformOneMessage(message, accountId, isFirst, isLast, false);
-    lastMessageUser = message.from_address;
+    lastMessageDate = date;
     return result;
   });
 };

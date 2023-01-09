@@ -7,7 +7,7 @@ Chats & Messages service for NEAR Blockchain
 1. Setup required packages:
 
 ```bash
-npm install --save urql@3 graphql@16 react-textarea-autosize@8 @near-wallet-selector/core @near-wallet-selector/ledger @near-wallet-selector/modal-ui @near-wallet-selector/near-wallet @near-wallet-selector/sender
+npm install --save urql@3 react-linkify-it graphql@16 react-textarea-autosize@8 @near-wallet-selector/core @near-wallet-selector/ledger @near-wallet-selector/modal-ui @near-wallet-selector/near-wallet @near-wallet-selector/sender @near-wallet-selector/meteor-wallet 
 ```
 
 2. Copy all files from "src" directory into your project.
