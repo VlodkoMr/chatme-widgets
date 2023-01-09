@@ -97,11 +97,11 @@ var ChatmeChat = function ChatmeChat(_ref) {
     reloadCounter = _useState22[0],
     setReloadCounter = _useState22[1];
   var initWallet = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var chatmeInterface, socialInterface, walletConnect;
-      return _regeneratorRuntime().wrap(function _callee$(_context) {
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
-          switch (_context.prev = _context.next) {
+          switch (_context2.prev = _context2.next) {
             case 0:
               chatmeInterface = new _mainContract.MainContract({
                 contractId: (0, _mainContract.chatmeContractAddress)(network),
@@ -111,10 +111,10 @@ var ChatmeChat = function ChatmeChat(_ref) {
                 contractId: (0, _socialContract.socialContractAddress)(network),
                 walletToUse: walletInterface
               });
-              _context.next = 4;
+              _context2.next = 4;
               return walletInterface.startUp();
             case 4:
-              walletConnect = _context.sent;
+              walletConnect = _context2.sent;
               setWallet({
                 interface: walletInterface,
                 isSigned: walletConnect,
@@ -122,12 +122,44 @@ var ChatmeChat = function ChatmeChat(_ref) {
                 chatmeContract: chatmeInterface,
                 socialContract: socialInterface
               });
-            case 6:
+
+              // async wallets support - meteor, sender, here-wallet
+              walletInterface.walletSelector.store.observable.subscribe( /*#__PURE__*/function () {
+                var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(nextAccounts) {
+                  return _regeneratorRuntime().wrap(function _callee$(_context) {
+                    while (1) {
+                      switch (_context.prev = _context.next) {
+                        case 0:
+                          if (nextAccounts.accounts.length) {
+                            setWallet(function (prev) {
+                              prev.isSigned = true;
+                              prev.accountId = nextAccounts.accounts[0].accountId;
+                              return prev;
+                            });
+                          } else {
+                            setWallet(function (prev) {
+                              prev.isSigned = false;
+                              prev.accountId = "";
+                              return prev;
+                            });
+                          }
+                        case 1:
+                        case "end":
+                          return _context.stop();
+                      }
+                    }
+                  }, _callee);
+                }));
+                return function (_x) {
+                  return _ref3.apply(this, arguments);
+                };
+              }());
+            case 7:
             case "end":
-              return _context.stop();
+              return _context2.stop();
           }
         }
-      }, _callee);
+      }, _callee2);
     }));
     return function initWallet() {
       return _ref2.apply(this, arguments);
@@ -139,25 +171,6 @@ var ChatmeChat = function ChatmeChat(_ref) {
       setTmpMessages([]);
     });
   }, [chatId]);
-
-  // useEffect(() => {
-  //   const subscription = wallet.walletSelector.store.observable.subscribe(async (nextAccounts) => {
-  //     if (nextAccounts.accounts.length) {
-  //       await wallet.onAccountChange(nextAccounts.accounts[0].accountId);
-  //       setIsSigned(true);
-  //
-  //       loadAccount().then(account => {
-  //         setAccount(account);
-  //       });
-  //     } else {
-  //       setIsSigned(false);
-  //       setAccount(null);
-  //     }
-  //   });
-  //
-  //   return () => subscription.unsubscribe();
-  // }, []);
-
   (0, _react.useEffect)(function () {
     if (wallet.interface) {
       Promise.all([(0, _requests.loadGroupInfo)(wallet, chatId), (0, _requests.loadGroupMessages)(network, chatId, messagesPerPage)]).then(function (result) {
@@ -186,7 +199,7 @@ var ChatmeChat = function ChatmeChat(_ref) {
         clearInterval(updateInterval);
       };
     }
-  }, [wallet.interface]);
+  }, [wallet.interface, wallet.isSigned]);
   (0, _react.useEffect)(function () {
     if (reloadCounter) {
       appendNewChatMessages();

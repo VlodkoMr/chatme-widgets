@@ -28,18 +28,18 @@ var OneMessage = function OneMessage(_ref) {
       className: "hidden group-hover:block flex flex-shrink-0 focus:outline-none mr-2 block rounded-full " + "text-gray-500 hover:text-gray-900 hover:bg-gray-700 bg-gray-800 w-8 h-8 p-2"
     }, children);
   };
-  return /*#__PURE__*/React.createElement(React.Fragment, null, message.isFirst && !message.isTemporary && /*#__PURE__*/React.createElement("p", {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, message.isDateFirst && !message.isTemporary && /*#__PURE__*/React.createElement("p", {
     className: "p-4 text-center text-sm font-medium text-gray-500"
   }, (0, _datetime.timestampToDate)(message.created_at, 'long')), /*#__PURE__*/React.createElement("div", {
     className: "flex flex-row mb-2 justify-start ".concat(message.isMy ? "justify-end" : "justify-start")
   }, /*#__PURE__*/React.createElement("div", {
     className: "hidden md:block md:w-10 md:h-10 relative flex flex-shrink-0 mr-4"
-  }, !message.isMy && message.isFirst && /*#__PURE__*/React.createElement(_Avatar.Avatar, {
+  }, !message.isMy && (message.isUserFirst || message.isDateFirst) && /*#__PURE__*/React.createElement(_Avatar.Avatar, {
     media: (opponent === null || opponent === void 0 ? void 0 : opponent.image) || "",
     title: message.from_address
   })), /*#__PURE__*/React.createElement("div", {
     className: "messages text-sm text-white grid grid-flow-row gap-2"
-  }, message.isFirst && !message.isMy && /*#__PURE__*/React.createElement("div", {
+  }, !message.isMy && (message.isUserFirst || message.isDateFirst) && /*#__PURE__*/React.createElement("div", {
     className: "text-gray-400 font-medium leading-3"
   }, opponent !== null && opponent !== void 0 && opponent.name ? /*#__PURE__*/React.createElement(React.Fragment, null, opponent === null || opponent === void 0 ? void 0 : opponent.name, " ", /*#__PURE__*/React.createElement("small", {
     className: "opacity-60"
@@ -75,7 +75,7 @@ var OneMessage = function OneMessage(_ref) {
   }, /*#__PURE__*/React.createElement("path", {
     d: "M19,16.685c0,0-2.225-9.732-11-9.732V2.969L1,9.542l7,6.69v-4.357C12.763,11.874,16.516,12.296,19,16.685z"
   })))), /*#__PURE__*/React.createElement("div", {
-    className: "max-w-[260px] md:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl whitespace-pre-wrap px-5 \n              overflow-ellipsis text-base relative min-h-[46px] text-gray-100\n              ".concat(message.text === '(like)' ? "py-2.5" : "py-3", "\n              ").concat(message.isFirst && message.isMy ? "rounded-t-3xl" : "", "\n              ").concat(isLast ? "rounded-b-3xl" : "", "\n              ").concat(message.isTemporary ? "opacity-70" : "", "\n              ").concat(message.isMy ? "bg-sky-500/50 rounded-l-3xl ml-2" : "bg-gray-700/60 rounded-r-3xl mr-2", "\n              ").concat(message.isEncryptStart || message.isEncryptAccept || message.isEncryptEnd ? "bg-red-600/30" : "", "\n            ")
+    className: "max-w-[260px] md:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl whitespace-pre-wrap px-5 \n              overflow-ellipsis text-base relative min-h-[46px] text-gray-100\n              ".concat(message.text === '(like)' ? "py-2.5" : "py-3", "\n              ").concat(message.isUserFirst || message.isDateFirst ? "rounded-t-3xl" : "", "\n              ").concat(isLast ? "rounded-b-3xl" : "", "\n              ").concat(message.isTemporary ? "opacity-70" : "", "\n              ").concat(message.isMy ? "bg-sky-500/50 rounded-l-3xl ml-2" : "bg-gray-700/60 rounded-r-3xl mr-2", "\n              ").concat(message.isEncryptStart || message.isEncryptAccept || message.isEncryptEnd ? "bg-red-600/30" : "", "\n            ")
   }, message.reply_message && /*#__PURE__*/React.createElement("p", {
     className: "border-b border-gray-200/20 mb-2 pb-1 text-sm opacity-50"
   }, /*#__PURE__*/React.createElement("svg", {

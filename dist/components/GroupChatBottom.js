@@ -96,7 +96,7 @@ var GroupChatBottom = function GroupChatBottom(_ref) {
   }, /*#__PURE__*/_react.default.createElement("a", {
     href: chatmeURL,
     className: "block font-semibold w-32 mb-0.5 overflow-hidden overflow-ellipsis whitespace-nowrap hover:opacity-90 transition"
-  }, wallet.accountId, wallet.accountId), /*#__PURE__*/_react.default.createElement("small", {
+  }, wallet.accountId), /*#__PURE__*/_react.default.createElement("small", {
     onClick: function onClick() {
       return wallet.interface.signOut();
     },
